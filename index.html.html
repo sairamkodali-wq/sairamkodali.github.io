@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sai Ram Kodali — AI Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --bg2: #111111;
+      --surface: #161616;
+      --border: rgba(255,255,255,0.07);
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --text: #e8e4dc;
+      --muted: #6b6760;
+      --accent: #c9a84c;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, width 0.2s, height 0.2s, opacity 0.2s;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(201,168,76,0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease, width 0.3s, height 0.3s;
+    }
+    body:hover .cursor { opacity: 1; }
+
+    /* Noise overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 60px;
+      background: linear-gradient(to bottom, rgba(13,13,13,0.95), transparent);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex; gap: 40px; list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg-line {
+      position: absolute;
+      top: 0; right: 120px;
+      width: 1px; height: 100%;
+      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+      opacity: 0.15;
+    }
+    .hero-bg-line2 {
+      position: absolute;
+      top: 0; right: 240px;
+      width: 1px; height: 100%;
+      background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.4), transparent);
+      opacity: 0.07;
+    }
+    .hero-content {
+      max-width: 800px;
+      animation: fadeUp 1s ease both;
+    }
+    .hero-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .hero-label::before {
+      content: '';
+      display: inline-block;
+      width: 40px; height: 1px;
+      background: var(--gold);
+    }
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 10vw, 8rem);
+      font-weight: 300;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+    }
+    .hero-name em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-tagline {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      max-width: 420px;
+      line-height: 1.8;
+      margin-bottom: 48px;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 32px;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      transition: background 0.3s, color 0.3s;
+    }
+    .hero-cta:hover {
+      background: var(--gold);
+      color: var(--bg);
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 48px; right: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+    }
+    .hero-scroll::after {
+      content: '';
+      width: 1px; height: 60px;
+      background: linear-gradient(to bottom, var(--muted), transparent);
+      animation: scrollPulse 2s ease infinite;
+    }
+
+    /* SECTION COMMONS */
+    section {
+      padding: 120px 60px;
+      position: relative;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 72px;
+    }
+    .section-num {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      max-width: 200px;
+    }
+
+    /* ABOUT */
+    #about {
+      background: var(--bg2);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .about-text p {
+      font-size: 0.8rem;
+      line-height: 2;
+      color: #a09b93;
+      margin-bottom: 20px;
+    }
+    .about-text p strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+    .about-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .about-detail-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.7rem;
+    }
+    .about-detail-item:first-child { border-top: 1px solid var(--border); }
+    .detail-label { color: var(--muted); letter-spacing: 0.1em; }
+    .detail-value { color: var(--text); }
+
+    /* PROJECTS */
+    #projects {
+      background: var(--bg);
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .project-card {
+      background: var(--surface);
+      padding: 40px 36px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.4s;
+      cursor: none;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,0.06), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .project-card:hover { background: #1a1a1a; }
+    .project-card:hover::before { opacity: 1; }
+    .project-num {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      margin-bottom: 40px;
+    }
+    .project-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .project-desc {
+      font-size: 0.7rem;
+      line-height: 1.8;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    .project-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 32px;
+    }
+    .tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .project-link {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: gap 0.3s;
+    }
+    .project-link:hover { gap: 14px; }
+    .project-link::after { content: '→'; }
+
+    /* SKILLS */
+    #skills {
+      background: var(--bg2);
+    }
+    .skills-layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 80px;
+    }
+    .skills-intro {
+      font-size: 0.75rem;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+    .skills-categories {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+    .skill-category-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--gold);
+      margin-bottom: 20px;
+      letter-spacing: 0.05em;
+    }
+    .skill-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .skill-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .skill-name {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      width: 100px;
+      flex-shrink: 0;
+    }
+    .skill-track {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      position: relative;
+    }
+    .skill-fill {
+      position: absolute;
+      top: 0; left: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--gold), var(--gold-light));
+      width: 0;
+      transition: width 1.2s ease;
+    }
+    .skill-pct {
+      font-size: 0.6rem;
+      color: var(--gold);
+      width: 36px;
+      text-align: right;
+    }
+
+    /* CONTACT */
+    #contact {
+      background: var(--bg);
+      text-align: center;
+    }
+    .contact-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .contact-intro {
+      font-size: 0.75rem;
+      line-height: 2;
+      color: var(--muted);
+      margin-bottom: 56px;
+    }
+    .contact-email {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      font-weight: 300;
+      color: var(--text);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 48px;
+      transition: color 0.3s;
+      letter-spacing: -0.01em;
+    }
+    .contact-email:hover { color: var(--gold); }
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+    }
+    .social-link {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .social-link:hover { color: var(--gold); }
+
+    /* FOOTER */
+    footer {
+      padding: 32px 60px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer span {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      section { padding: 80px 24px; }
+      #hero { padding: 0 24px; }
+      .about-grid, .skills-layout, .projects-grid { grid-template-columns: 1fr; gap: 40px; }
+      .hero-scroll { display: none; }
+      footer { flex-direction: column; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Nav -->
+  <nav>
+    <a href="#hero" class="nav-logo">SRK</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-bg-line"></div>
+    <div class="hero-bg-line2"></div>
+    <div class="hero-content">
+      <div class="hero-label">Open to Opportunities · Maryland, USA</div>
+      <h1 class="hero-name">Sai Ram<br/><em>Kodali</em></h1>
+      <p class="hero-tagline">
+        AI Engineer building intelligent cloud-native systems on Azure & AWS — from LLM-powered backends to production-grade DevOps pipelines.
+      </p>
+      <a href="#projects" class="hero-cta">View My Work</a>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="section-header reveal">
+      <span class="section-num">01</span>
+      <h2 class="section-title">About Me</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          I'm an <strong>AI Engineer</strong> with around 3 years of professional experience delivering AI-driven solutions on Microsoft Azure and AWS. My work sits at the intersection of cloud infrastructure, LLM integration, and backend engineering.
+        </p>
+        <p>
+          At Simple Cell Inc., I build production AI systems using <strong>Azure OpenAI, ASP.NET Core, and .NET 6/7</strong> — solving real business problems like returns analysis, inventory forecasting, and pricing intelligence for a refurbished mobile devices platform.
+        </p>
+        <p>
+          I hold certifications as an <strong>Azure DevOps Engineer Expert</strong> and <strong>Azure Solutions Architect Expert</strong>, and I'm passionate about building systems that are not just intelligent, but secure, observable, and scalable.
+        </p>
+      </div>
+      <div class="about-details reveal">
+        <div class="about-detail-item">
+          <span class="detail-label">Location</span>
+          <span class="detail-value">Maryland, USA</span>
+        </div>
+        <div class="about-detail-item">
+          <span class="detail-label">Experience</span>
+          <span class="detail-value">~3 Years</span>
+        </div>
+        <div class="about-detail-item">
+          <span class="detail-label">Speciality</span>
+          <span class="detail-value">AI Engineering · Cloud Platforms</span>
+        </div>
+        <div class="about-detail-item">
+          <span class="detail-label">Education</span>
+          <span class="detail-value">M.S. Computer Science, Hood College</span>
+        </div>
+        <div class="about-detail-item">
+          <span class="detail-label">Status</span>
+          <span class="detail-value" style="color:var(--gold)">Open to Opportunities</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects">
+    <div class="section-header reveal">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Projects</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <div class="project-num">001</div>
+        <h3 class="project-title">AI Returns<br/>Intelligence</h3>
+        <p class="project-desc">Built Azure OpenAI-powered backend services to analyze return reasons, technician notes, and customer interactions — generating risk indicators to detect abnormal patterns and reduce financial loss.</p>
+        <div class="project-tags">
+          <span class="tag">Azure OpenAI</span>
+          <span class="tag">ASP.NET Core</span>
+          <span class="tag">C#</span>
+          <span class="tag">SQL Server</span>
+          <span class="tag">Redis</span>
+        </div>
+        <a href="#contact" class="project-link">Get in Touch</a>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-num">002</div>
+        <h3 class="project-title">Inventory &<br/>Pricing AI</h3>
+        <p class="project-desc">Developed demand forecasting and pricing recommendation logic using historical sales, return rates, and inventory aging data. Delivered Power BI dashboards exposing AI insights for leadership.</p>
+        <div class="project-tags">
+          <span class="tag">.NET 6/7</span>
+          <span class="tag">Azure Functions</span>
+          <span class="tag">Power BI</span>
+          <span class="tag">RAG</span>
+        </div>
+        <a href="#contact" class="project-link">Get in Touch</a>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-num">003</div>
+        <h3 class="project-title">Cloud-Native<br/>DevOps Platform</h3>
+        <p class="project-desc">Containerized .NET services with Docker and Kubernetes on AWS & Azure. Built CI/CD pipelines with GitHub Actions and Jenkins. Secured secrets via Azure Key Vault and monitored with Application Insights.</p>
+        <div class="project-tags">
+          <span class="tag">Docker</span>
+          <span class="tag">Kubernetes</span>
+          <span class="tag">Azure DevOps</span>
+          <span class="tag">Terraform</span>
+          <span class="tag">AWS</span>
+        </div>
+        <a href="#contact" class="project-link">Get in Touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills">
+    <div class="section-header reveal">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Skills</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="skills-layout">
+      <div class="skills-intro reveal">
+        A focused toolkit built through real production deployments — from LLM integration and cloud architecture to DevOps automation and secure backend design.
+      </div>
+      <div class="skills-categories">
+        <div class="reveal">
+          <div class="skill-category-title">AI & Cloud</div>
+          <div class="skill-bars">
+            <div class="skill-bar-row">
+              <span class="skill-name">Azure OpenAI</span>
+              <div class="skill-track"><div class="skill-fill" data-w="92"></div></div>
+              <span class="skill-pct">92%</span>
+            </div>
+            <div class="skill-bar-row">
+              <span class="skill-name">Microsoft Azure</span>
+              <div class="skill-track"><div class="skill-fill" data-w="90"></div></div>
+              <span class="skill-pct">90%</span>
+            </div>
+            <div class="skill-bar-row">
+              <span class="skill-name">AWS</span>
+              <div class="skill-track"><div class="skill-fill" data-w="78"></div></div>
+              <span class="skill-pct">78%</span>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="skill-category-title">Backend</div>
+          <div class="skill-bars">
+            <div class="skill-bar-row">
+              <span class="skill-name">C# / .NET</span>
+              <div class="skill-track"><div class="skill-fill" data-w="93"></div></div>
+              <span class="skill-pct">93%</span>
+            </div>
+            <div class="skill-bar-row">
+              <span class="skill-name">ASP.NET Core</span>
+              <div class="skill-track"><div class="skill-fill" data-w="90"></div></div>
+              <span class="skill-pct">90%</span>
+            </div>
+            <div class="skill-bar-row">
+              <span class="skill-name">SQL / PostgreSQL</span>
+              <div class="skill-track"><div class="skill-fill" data-w="84"></div></div>
+              <span class="skill-pct">84%</span>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="skill-category-title">DevOps & Infra</div>
+          <div class="skill-bars">
+            <div class="skill-bar-row">
+              <span class="skill-name">Docker / K8s</span>
+              <div class="skill-track"><div class="skill-fill" data-w="85"></div></div>
+              <span class="skill-pct">85%</span>
+            </div>
+            <div class="skill-bar-row">
+              <span class="skill-name">CI/CD Pipelines</span>
+              <div class="skill-track"><div class="skill-fill" data-w="88"></div></div>
+              <span class="skill-pct">88%</span>
+            </div>
+            <div class="skill-bar-row">
+              <span class="skill-name">Terraform</span>
+              <div class="skill-track"><div class="skill-fill" data-w="76"></div></div>
+              <span class="skill-pct">76%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="section-header reveal" style="justify-content:center; text-align:center;">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Contact</h2>
+    </div>
+    <div class="contact-inner reveal">
+      <p class="contact-intro">
+        Have a project in mind, or looking for an AI Engineer with hands-on Azure and cloud experience? I'd love to connect.
+      </p>
+      <a href="mailto:sairamkodali633@gmail.com" class="contact-email">sairamkodali633@gmail.com</a>
+      <div class="social-links">
+        <a href="tel:+15713267786" class="social-link">+1 (571) 326-7786</a>
+        <a href="#" class="social-link">LinkedIn</a>
+        <a href="#" class="social-link">GitHub</a>
+        <a href="#" class="social-link">Resume</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <span>© 2026 Sai Ram Kodali</span>
+    <span>Designed & Built with care</span>
+  </footer>
+
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+    function animateRing() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(animateRing); }
+    animateRing();
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), 80 * (Array.from(reveals).indexOf(e.target) % 4));
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(r => observer.observe(r));
+
+    // Skill bar animation
+    const skillObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.skill-fill').forEach(bar => {
+            bar.style.width = bar.dataset.w + '%';
+          });
+        }
+      });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.skills-categories > div').forEach(c => skillObserver.observe(c));
+  </script>
+</body>
+</html>
