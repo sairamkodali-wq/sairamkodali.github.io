@@ -1,748 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sai Ram Kodali — AI Engineer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --bg: #0d0d0d;
-      --bg2: #111111;
-      --surface: #161616;
-      --border: rgba(255,255,255,0.07);
-      --gold: #c9a84c;
-      --gold-light: #e8c97a;
-      --text: #e8e4dc;
-      --muted: #6b6760;
-      --accent: #c9a84c;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Mono', monospace;
-      font-weight: 300;
-      overflow-x: hidden;
-      cursor: none;
-    }
-
-    /* Custom cursor */
-    .cursor {
-      position: fixed;
-      width: 10px; height: 10px;
-      background: var(--gold);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s, width 0.2s, height 0.2s, opacity 0.2s;
-      mix-blend-mode: difference;
-    }
-    .cursor-ring {
-      position: fixed;
-      width: 36px; height: 36px;
-      border: 1px solid rgba(201,168,76,0.5);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: transform 0.15s ease, width 0.3s, height 0.3s;
-    }
-    body:hover .cursor { opacity: 1; }
-
-    /* Noise overlay */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 1000;
-      opacity: 0.4;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 28px 60px;
-      background: linear-gradient(to bottom, rgba(13,13,13,0.95), transparent);
-    }
-    .nav-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
-      font-weight: 300;
-      letter-spacing: 0.15em;
-      color: var(--gold);
-      text-decoration: none;
-    }
-    .nav-links {
-      display: flex; gap: 40px; list-style: none;
-    }
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      transition: color 0.3s;
-    }
-    .nav-links a:hover { color: var(--gold); }
-
-    /* HERO */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 0 60px;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-bg-line {
-      position: absolute;
-      top: 0; right: 120px;
-      width: 1px; height: 100%;
-      background: linear-gradient(to bottom, transparent, var(--gold), transparent);
-      opacity: 0.15;
-    }
-    .hero-bg-line2 {
-      position: absolute;
-      top: 0; right: 240px;
-      width: 1px; height: 100%;
-      background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.4), transparent);
-      opacity: 0.07;
-    }
-    .hero-content {
-      max-width: 800px;
-      animation: fadeUp 1s ease both;
-    }
-    .hero-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 28px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .hero-label::before {
-      content: '';
-      display: inline-block;
-      width: 40px; height: 1px;
-      background: var(--gold);
-    }
-    .hero-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(4rem, 10vw, 8rem);
-      font-weight: 300;
-      line-height: 0.9;
-      letter-spacing: -0.02em;
-      margin-bottom: 32px;
-    }
-    .hero-name em {
-      font-style: italic;
-      color: var(--gold);
-    }
-    .hero-tagline {
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      color: var(--muted);
-      max-width: 420px;
-      line-height: 1.8;
-      margin-bottom: 48px;
-    }
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 32px;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      text-decoration: none;
-      font-size: 0.65rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      transition: background 0.3s, color 0.3s;
-    }
-    .hero-cta:hover {
-      background: var(--gold);
-      color: var(--bg);
-    }
-    .hero-scroll {
-      position: absolute;
-      bottom: 48px; right: 60px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 0.6rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      writing-mode: vertical-rl;
-    }
-    .hero-scroll::after {
-      content: '';
-      width: 1px; height: 60px;
-      background: linear-gradient(to bottom, var(--muted), transparent);
-      animation: scrollPulse 2s ease infinite;
-    }
-
-    /* SECTION COMMONS */
-    section {
-      padding: 120px 60px;
-      position: relative;
-    }
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      margin-bottom: 72px;
-    }
-    .section-num {
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      color: var(--gold);
-    }
-    .section-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 300;
-      letter-spacing: -0.01em;
-    }
-    .section-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-      max-width: 200px;
-    }
-
-    /* ABOUT */
-    #about {
-      background: var(--bg2);
-    }
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: start;
-    }
-    .about-text p {
-      font-size: 0.8rem;
-      line-height: 2;
-      color: #a09b93;
-      margin-bottom: 20px;
-    }
-    .about-text p strong {
-      color: var(--text);
-      font-weight: 400;
-    }
-    .about-details {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-    .about-detail-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.7rem;
-    }
-    .about-detail-item:first-child { border-top: 1px solid var(--border); }
-    .detail-label { color: var(--muted); letter-spacing: 0.1em; }
-    .detail-value { color: var(--text); }
-
-    /* PROJECTS */
-    #projects {
-      background: var(--bg);
-    }
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-    }
-    .project-card {
-      background: var(--surface);
-      padding: 40px 36px;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.4s;
-      cursor: none;
-    }
-    .project-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(201,168,76,0.06), transparent);
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-    .project-card:hover { background: #1a1a1a; }
-    .project-card:hover::before { opacity: 1; }
-    .project-num {
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      color: var(--gold);
-      margin-bottom: 40px;
-    }
-    .project-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem;
-      font-weight: 400;
-      margin-bottom: 16px;
-      line-height: 1.2;
-    }
-    .project-desc {
-      font-size: 0.7rem;
-      line-height: 1.8;
-      color: var(--muted);
-      margin-bottom: 32px;
-    }
-    .project-tags {
-      display: flex; flex-wrap: wrap; gap: 8px;
-      margin-bottom: 32px;
-    }
-    .tag {
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      padding: 4px 10px;
-      border: 1px solid var(--border);
-      color: var(--muted);
-    }
-    .project-link {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: gap 0.3s;
-    }
-    .project-link:hover { gap: 14px; }
-    .project-link::after { content: '→'; }
-
-    /* SKILLS */
-    #skills {
-      background: var(--bg2);
-    }
-    .skills-layout {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 80px;
-    }
-    .skills-intro {
-      font-size: 0.75rem;
-      line-height: 1.9;
-      color: var(--muted);
-    }
-    .skills-categories {
-      display: flex;
-      flex-direction: column;
-      gap: 48px;
-    }
-    .skill-category-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.1rem;
-      font-weight: 300;
-      color: var(--gold);
-      margin-bottom: 20px;
-      letter-spacing: 0.05em;
-    }
-    .skill-bars {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .skill-bar-row {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    .skill-name {
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      width: 100px;
-      flex-shrink: 0;
-    }
-    .skill-track {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-      position: relative;
-    }
-    .skill-fill {
-      position: absolute;
-      top: 0; left: 0;
-      height: 1px;
-      background: linear-gradient(to right, var(--gold), var(--gold-light));
-      width: 0;
-      transition: width 1.2s ease;
-    }
-    .skill-pct {
-      font-size: 0.6rem;
-      color: var(--gold);
-      width: 36px;
-      text-align: right;
-    }
-
-    /* CONTACT */
-    #contact {
-      background: var(--bg);
-      text-align: center;
-    }
-    .contact-inner {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    .contact-intro {
-      font-size: 0.75rem;
-      line-height: 2;
-      color: var(--muted);
-      margin-bottom: 56px;
-    }
-    .contact-email {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.5rem, 4vw, 3rem);
-      font-weight: 300;
-      color: var(--text);
-      text-decoration: none;
-      display: block;
-      margin-bottom: 48px;
-      transition: color 0.3s;
-      letter-spacing: -0.01em;
-    }
-    .contact-email:hover { color: var(--gold); }
-    .social-links {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-    }
-    .social-link {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-    .social-link:hover { color: var(--gold); }
-
-    /* FOOTER */
-    footer {
-      padding: 32px 60px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    footer span {
-      font-size: 0.6rem;
-      letter-spacing: 0.15em;
-      color: var(--muted);
-    }
-
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes scrollPulse {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
-    }
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (max-width: 900px) {
-      nav { padding: 20px 24px; }
-      section { padding: 80px 24px; }
-      #hero { padding: 0 24px; }
-      .about-grid, .skills-layout, .projects-grid { grid-template-columns: 1fr; gap: 40px; }
-      .hero-scroll { display: none; }
-      footer { flex-direction: column; gap: 12px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sai Ram Kodali — AI Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fafaf8;--card:#fff;--text:#1a1a1a;--muted:#6b6b6b;--light:#a0a0a0;--accent:#2563eb;--border:#e5e5e2;--mono:'DM Mono',monospace;--serif:'Source Serif 4',Georgia,serif}
+html{scroll-behavior:smooth}
+body{font-family:var(--serif);background:var(--bg);color:var(--text);line-height:1.7}
+::selection{background:var(--accent);color:#fff}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,248,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:960px;margin:0 auto;padding:14px 28px;display:flex;justify-content:space-between;align-items:center}
+.nav-name{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.08em}
+.nav-links{display:flex;gap:24px}
+.nav-links a{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--text)}
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 28px 80px;position:relative}
+.hero-label{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+.hero h1{font-size:clamp(44px,8vw,72px);font-weight:300;line-height:1;letter-spacing:-.02em}
+.hero-sub{font-style:italic;font-size:18px;font-weight:300;color:var(--muted);margin-top:24px;max-width:500px;margin-left:auto;margin-right:auto}
+.hero-links{margin-top:36px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.hero-links a{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--text);text-decoration:none;padding:10px 20px;border:1px solid var(--border);border-radius:99px;transition:all .3s}
+.hero-links a:hover{background:var(--text);color:var(--bg);border-color:var(--text)}
+.scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:13px;color:var(--light);animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+section{padding:80px 28px}
+.section-inner{max-width:960px;margin:0 auto}
+.section-label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:32px;padding-bottom:12px;border-bottom:1px solid var(--border);display:inline-block}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:12px}
+.about-text{font-size:17px;font-weight:300;color:var(--muted);line-height:1.8}
+.about-text p+p{margin-top:16px}
+.skills-group{margin-bottom:20px}
+.skills-group h4{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--light);margin-bottom:8px}
+.skills-list{display:flex;flex-wrap:wrap;gap:6px}
+.skill-tag{font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:99px;border:1px solid var(--border);color:var(--muted);background:var(--card);transition:all .3s}
+.skill-tag:hover{border-color:var(--accent);color:var(--accent)}
+.project-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:36px;margin-bottom:24px;transition:border-color .3s,box-shadow .3s}
+.project-card:hover{border-color:#ccc;box-shadow:0 4px 24px rgba(0,0,0,.04)}
+.project-company{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.project-title{font-size:24px;font-weight:400;margin-top:4px;letter-spacing:-.01em}
+.project-desc{font-style:italic;font-size:15px;font-weight:300;color:var(--muted);margin-top:12px}
+.project-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.project-tag{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:99px;border:1px solid var(--border);color:var(--light)}
+.project-highlights{margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
+.project-highlights ul{list-style:none;padding:0}
+.project-highlights li{font-size:15px;font-weight:300;color:var(--muted);padding:4px 0 4px 20px;position:relative}
+.project-highlights li::before{content:'→';position:absolute;left:0;color:var(--accent);font-size:13px}
+.project-impact{margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.02em;padding:10px 16px;background:rgba(37,99,235,.05);border-radius:8px;display:inline-block}
+.exp-item{padding:28px 0;border-bottom:1px solid var(--border)}
+.exp-item:last-child{border-bottom:none}
+.exp-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.exp-role{font-size:20px;font-weight:400}
+.exp-company{font-family:var(--mono);font-size:12px;color:var(--accent);margin-top:2px}
+.exp-date{font-family:var(--mono);font-size:11px;color:var(--light);letter-spacing:.06em}
+.exp-desc{font-size:15px;font-weight:300;color:var(--muted);margin-top:10px}
+.edu-item{margin-bottom:16px}
+.edu-degree{font-size:17px;font-weight:400}
+.edu-school{font-family:var(--mono);font-size:12px;color:var(--accent);margin-top:2px}
+.cert-list{list-style:none;padding:0;margin-top:8px}
+.cert-list li{font-size:15px;font-weight:300;color:var(--muted);padding:6px 0 6px 20px;position:relative}
+.cert-list li::before{content:'✓';position:absolute;left:0;color:var(--accent);font-weight:600;font-size:13px}
+.contact-section{text-align:center;min-height:50vh;display:flex;align-items:center}
+.contact-title{font-size:clamp(28px,5vw,44px);font-weight:300;letter-spacing:-.02em}
+.contact-sub{font-size:16px;font-weight:300;color:var(--muted);margin-top:12px}
+.contact-links{margin-top:32px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.contact-links a{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--text);text-decoration:none;padding:12px 24px;border:1px solid var(--text);border-radius:99px;transition:all .3s}
+.contact-links a:hover{background:var(--text);color:var(--bg)}
+footer{max-width:960px;margin:0 auto;padding:28px;display:flex;justify-content:space-between;border-top:1px solid var(--border)}
+footer span{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--light)}
+.fade{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.fade.show{opacity:1;transform:translateY(0)}
+@media(max-width:700px){.about-grid{grid-template-columns:1fr}.nav-links{gap:14px}section{padding:60px 20px}.edu-grid{grid-template-columns:1fr!important}}
+</style>
 </head>
 <body>
+<nav><div class="nav-inner"><span class="nav-name">Sai Ram Kodali</span><div class="nav-links"><a href="#about">About</a><a href="#projects">Work</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#contact">Contact</a></div></div></nav>
 
-  <!-- Cursor -->
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
+<section class="hero"><div class="fade" id="hero-content"><p class="hero-label">AI Engineer</p><h1>Sai Ram<br>Kodali</h1><p class="hero-sub">Building production AI systems — from LLMs and RAG pipelines to lead generation and analytics — that solve real business problems.</p><div class="hero-links"><a href="https://github.com/sairamkodali-wq" target="_blank">GitHub</a><a href="mailto:sairamkodali633@gmail.com">Email</a></div></div><span class="scroll-hint">↓</span></section>
 
-  <!-- Nav -->
-  <nav>
-    <a href="#hero" class="nav-logo">SRK</a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+<section id="about"><div class="section-inner"><div class="section-label">About</div><div class="about-grid"><div class="about-text"><p>I'm an AI Engineer with ~3 years of experience building AI-driven systems using LLMs, cloud platforms, and data pipelines. I specialize in applying AI to real-world business problems — analytics, automation, lead generation, and marketing optimization.</p><p>At SimpleCell Communications, I design and deploy production-grade AI systems leveraging Azure OpenAI, RAG architectures, and intelligent workflows to drive measurable business impact.</p></div><div><div class="skills-group"><h4>AI & LLMs</h4><div class="skills-list"><span class="skill-tag">Azure OpenAI</span><span class="skill-tag">Claude</span><span class="skill-tag">RAG</span><span class="skill-tag">AI Agents</span><span class="skill-tag">Prompt Engineering</span><span class="skill-tag">Workflow Automation</span></div></div><div class="skills-group"><h4>Cloud & Data</h4><div class="skills-list"><span class="skill-tag">Azure</span><span class="skill-tag">AWS</span><span class="skill-tag">BigQuery</span><span class="skill-tag">SQL Server</span><span class="skill-tag">Data Pipelines</span></div></div><div class="skills-group"><h4>Engineering</h4><div class="skills-list"><span class="skill-tag">C# / .NET</span><span class="skill-tag">ASP.NET Core</span><span class="skill-tag">Python</span><span class="skill-tag">REST APIs</span><span class="skill-tag">Docker</span><span class="skill-tag">Kubernetes</span></div></div><div class="skills-group"><h4>Visualization</h4><div class="skills-list"><span class="skill-tag">Power BI</span><span class="skill-tag">React</span><span class="skill-tag">TypeScript</span></div></div></div></div></div></section>
 
-  <!-- Hero -->
-  <section id="hero">
-    <div class="hero-bg-line"></div>
-    <div class="hero-bg-line2"></div>
-    <div class="hero-content">
-      <div class="hero-label">Open to Opportunities · Maryland, USA</div>
-      <h1 class="hero-name">Sai Ram<br/><em>Kodali</em></h1>
-      <p class="hero-tagline">
-        AI Engineer building intelligent cloud-native systems on Azure & AWS — from LLM-powered backends to production-grade DevOps pipelines.
-      </p>
-      <a href="#projects" class="hero-cta">View My Work</a>
-    </div>
-    <div class="hero-scroll">Scroll</div>
-  </section>
+<section id="projects" style="background:#fff"><div class="section-inner"><div class="section-label">Selected Projects</div>
 
-  <!-- About -->
-  <section id="about">
-    <div class="section-header reveal">
-      <span class="section-num">01</span>
-      <h2 class="section-title">About Me</h2>
-      <div class="section-line"></div>
-    </div>
-    <div class="about-grid">
-      <div class="about-text reveal">
-        <p>
-          I'm an <strong>AI Engineer</strong> with around 3 years of professional experience delivering AI-driven solutions on Microsoft Azure and AWS. My work sits at the intersection of cloud infrastructure, LLM integration, and backend engineering.
-        </p>
-        <p>
-          At Simple Cell Inc., I build production AI systems using <strong>Azure OpenAI, ASP.NET Core, and .NET 6/7</strong> — solving real business problems like returns analysis, inventory forecasting, and pricing intelligence for a refurbished mobile devices platform.
-        </p>
-        <p>
-          I hold certifications as an <strong>Azure DevOps Engineer Expert</strong> and <strong>Azure Solutions Architect Expert</strong>, and I'm passionate about building systems that are not just intelligent, but secure, observable, and scalable.
-        </p>
-      </div>
-      <div class="about-details reveal">
-        <div class="about-detail-item">
-          <span class="detail-label">Location</span>
-          <span class="detail-value">Maryland, USA</span>
-        </div>
-        <div class="about-detail-item">
-          <span class="detail-label">Experience</span>
-          <span class="detail-value">~3 Years</span>
-        </div>
-        <div class="about-detail-item">
-          <span class="detail-label">Speciality</span>
-          <span class="detail-value">AI Engineering · Cloud Platforms</span>
-        </div>
-        <div class="about-detail-item">
-          <span class="detail-label">Education</span>
-          <span class="detail-value">M.S. Computer Science, Hood College</span>
-        </div>
-        <div class="about-detail-item">
-          <span class="detail-label">Status</span>
-          <span class="detail-value" style="color:var(--gold)">Open to Opportunities</span>
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="project-card fade"><div class="project-company">SimpleCell Communications</div><h3 class="project-title">AI Returns Intelligence System</h3><p class="project-desc">End-to-end AI system analyzing return reasons, technician notes, and customer interactions to detect abnormal patterns and reduce losses for a recommerce platform.</p><div class="project-tags"><span class="project-tag">Azure OpenAI</span><span class="project-tag">.NET Core</span><span class="project-tag">SQL Server</span><span class="project-tag">BigQuery</span><span class="project-tag">Power BI</span><span class="project-tag">RAG</span></div><div class="project-highlights"><ul><li>Designed backend APIs to ingest and process order and return data at scale</li><li>Integrated LLMs to extract structured insights from unstructured technician notes</li><li>Built risk scoring logic to flag abnormal return patterns automatically</li><li>Implemented RAG-based solutions grounded in internal business data</li><li>Created real-time Power BI dashboards for operations teams</li></ul><div class="project-impact">↑ Improved return trend visibility · Reduced return-related losses</div></div></div>
 
-  <!-- Projects -->
-  <section id="projects">
-    <div class="section-header reveal">
-      <span class="section-num">02</span>
-      <h2 class="section-title">Projects</h2>
-      <div class="section-line"></div>
-    </div>
-    <div class="projects-grid">
-      <div class="project-card reveal">
-        <div class="project-num">001</div>
-        <h3 class="project-title">AI Returns<br/>Intelligence</h3>
-        <p class="project-desc">Built Azure OpenAI-powered backend services to analyze return reasons, technician notes, and customer interactions — generating risk indicators to detect abnormal patterns and reduce financial loss.</p>
-        <div class="project-tags">
-          <span class="tag">Azure OpenAI</span>
-          <span class="tag">ASP.NET Core</span>
-          <span class="tag">C#</span>
-          <span class="tag">SQL Server</span>
-          <span class="tag">Redis</span>
-        </div>
-        <a href="#contact" class="project-link">Get in Touch</a>
-      </div>
-      <div class="project-card reveal">
-        <div class="project-num">002</div>
-        <h3 class="project-title">Inventory &<br/>Pricing AI</h3>
-        <p class="project-desc">Developed demand forecasting and pricing recommendation logic using historical sales, return rates, and inventory aging data. Delivered Power BI dashboards exposing AI insights for leadership.</p>
-        <div class="project-tags">
-          <span class="tag">.NET 6/7</span>
-          <span class="tag">Azure Functions</span>
-          <span class="tag">Power BI</span>
-          <span class="tag">RAG</span>
-        </div>
-        <a href="#contact" class="project-link">Get in Touch</a>
-      </div>
-      <div class="project-card reveal">
-        <div class="project-num">003</div>
-        <h3 class="project-title">Cloud-Native<br/>DevOps Platform</h3>
-        <p class="project-desc">Containerized .NET services with Docker and Kubernetes on AWS & Azure. Built CI/CD pipelines with GitHub Actions and Jenkins. Secured secrets via Azure Key Vault and monitored with Application Insights.</p>
-        <div class="project-tags">
-          <span class="tag">Docker</span>
-          <span class="tag">Kubernetes</span>
-          <span class="tag">Azure DevOps</span>
-          <span class="tag">Terraform</span>
-          <span class="tag">AWS</span>
-        </div>
-        <a href="#contact" class="project-link">Get in Touch</a>
-      </div>
-    </div>
-  </section>
+<div class="project-card fade"><div class="project-company">SimpleCell Communications</div><h3 class="project-title">Inventory & Pricing Intelligence</h3><p class="project-desc">AI-driven system optimizing inventory levels and pricing decisions using historical sales data, return rates, and inventory aging analysis.</p><div class="project-tags"><span class="project-tag">Azure</span><span class="project-tag">AWS</span><span class="project-tag">Python</span><span class="project-tag">BigQuery</span><span class="project-tag">.NET</span><span class="project-tag">Power BI</span></div><div class="project-highlights"><ul><li>Built demand forecasting models using historical sales and seasonality data</li><li>Analyzed SKU-level performance, return rates, and inventory aging</li><li>Generated dynamic pricing recommendations to maximize margin</li><li>Delivered interactive dashboards for leadership decision-making</li></ul><div class="project-impact">↑ Improved inventory turnover · Enabled data-driven pricing</div></div></div>
 
-  <!-- Skills -->
-  <section id="skills">
-    <div class="section-header reveal">
-      <span class="section-num">03</span>
-      <h2 class="section-title">Skills</h2>
-      <div class="section-line"></div>
-    </div>
-    <div class="skills-layout">
-      <div class="skills-intro reveal">
-        A focused toolkit built through real production deployments — from LLM integration and cloud architecture to DevOps automation and secure backend design.
-      </div>
-      <div class="skills-categories">
-        <div class="reveal">
-          <div class="skill-category-title">AI & Cloud</div>
-          <div class="skill-bars">
-            <div class="skill-bar-row">
-              <span class="skill-name">Azure OpenAI</span>
-              <div class="skill-track"><div class="skill-fill" data-w="92"></div></div>
-              <span class="skill-pct">92%</span>
-            </div>
-            <div class="skill-bar-row">
-              <span class="skill-name">Microsoft Azure</span>
-              <div class="skill-track"><div class="skill-fill" data-w="90"></div></div>
-              <span class="skill-pct">90%</span>
-            </div>
-            <div class="skill-bar-row">
-              <span class="skill-name">AWS</span>
-              <div class="skill-track"><div class="skill-fill" data-w="78"></div></div>
-              <span class="skill-pct">78%</span>
-            </div>
-          </div>
-        </div>
-        <div class="reveal">
-          <div class="skill-category-title">Backend</div>
-          <div class="skill-bars">
-            <div class="skill-bar-row">
-              <span class="skill-name">C# / .NET</span>
-              <div class="skill-track"><div class="skill-fill" data-w="93"></div></div>
-              <span class="skill-pct">93%</span>
-            </div>
-            <div class="skill-bar-row">
-              <span class="skill-name">ASP.NET Core</span>
-              <div class="skill-track"><div class="skill-fill" data-w="90"></div></div>
-              <span class="skill-pct">90%</span>
-            </div>
-            <div class="skill-bar-row">
-              <span class="skill-name">SQL / PostgreSQL</span>
-              <div class="skill-track"><div class="skill-fill" data-w="84"></div></div>
-              <span class="skill-pct">84%</span>
-            </div>
-          </div>
-        </div>
-        <div class="reveal">
-          <div class="skill-category-title">DevOps & Infra</div>
-          <div class="skill-bars">
-            <div class="skill-bar-row">
-              <span class="skill-name">Docker / K8s</span>
-              <div class="skill-track"><div class="skill-fill" data-w="85"></div></div>
-              <span class="skill-pct">85%</span>
-            </div>
-            <div class="skill-bar-row">
-              <span class="skill-name">CI/CD Pipelines</span>
-              <div class="skill-track"><div class="skill-fill" data-w="88"></div></div>
-              <span class="skill-pct">88%</span>
-            </div>
-            <div class="skill-bar-row">
-              <span class="skill-name">Terraform</span>
-              <div class="skill-track"><div class="skill-fill" data-w="76"></div></div>
-              <span class="skill-pct">76%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="project-card fade"><div class="project-company">SimpleCell Communications</div><h3 class="project-title">AI Lead Generation Pipeline</h3><p class="project-desc">Automated lead discovery and qualification system using LLMs and web scraping to identify, structure, and qualify business prospects at scale.</p><div class="project-tags"><span class="project-tag">Claude</span><span class="project-tag">Python</span><span class="project-tag">Automation</span><span class="project-tag">Web Scraping</span><span class="project-tag">AI Agents</span></div><div class="project-highlights"><ul><li>Built AI workflows using Claude + automation tools to discover potential business leads</li><li>Scraped, structured, and qualified business data for outreach pipelines</li><li>Developed AI-assisted cold outreach and targeting strategies</li><li>Used LLMs to generate marketing content and optimize engagement</li></ul><div class="project-impact">↑ Scaled lead generation · Automated outreach targeting</div></div></div>
 
-  <!-- Contact -->
-  <section id="contact">
-    <div class="section-header reveal" style="justify-content:center; text-align:center;">
-      <span class="section-num">04</span>
-      <h2 class="section-title">Contact</h2>
-    </div>
-    <div class="contact-inner reveal">
-      <p class="contact-intro">
-        Have a project in mind, or looking for an AI Engineer with hands-on Azure and cloud experience? I'd love to connect.
-      </p>
-      <a href="mailto:sairamkodali633@gmail.com" class="contact-email">sairamkodali633@gmail.com</a>
-      <div class="social-links">
-        <a href="tel:+15713267786" class="social-link">+1 (571) 326-7786</a>
-        <a href="#" class="social-link">LinkedIn</a>
-        <a href="#" class="social-link">GitHub</a>
-        <a href="#" class="social-link">Resume</a>
-      </div>
-    </div>
-  </section>
+<div class="project-card fade"><div class="project-company">SimpleCell Communications</div><h3 class="project-title">AI Analytics & Reporting Platform</h3><p class="project-desc">Centralized analytics platform exposing AI-generated insights to business stakeholders through interactive dashboards and automated reports.</p><div class="project-tags"><span class="project-tag">Power BI</span><span class="project-tag">BigQuery</span><span class="project-tag">Azure</span><span class="project-tag">SQL</span><span class="project-tag">.NET APIs</span></div><div class="project-highlights"><ul><li>Built data pipelines connecting cloud databases to visualization layer</li><li>Designed executive dashboards surfacing AI model outputs</li><li>Automated recurring reports reducing manual effort for operations</li></ul><div class="project-impact">↑ Faster decision-making · Reduced manual reporting</div></div></div>
 
-  <!-- Footer -->
-  <footer>
-    <span>© 2026 Sai Ram Kodali</span>
-    <span>Designed & Built with care</span>
-  </footer>
+</div></section>
 
-  <script>
-    // Cursor
-    const cursor = document.getElementById('cursor');
-    const ring = document.getElementById('cursorRing');
-    let mx = 0, my = 0, rx = 0, ry = 0;
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
-    function animateRing() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(animateRing); }
-    animateRing();
+<section id="experience"><div class="section-inner"><div class="section-label">Experience</div>
+<div class="exp-item fade"><div class="exp-top"><div><div class="exp-role">AI Engineer</div><div class="exp-company">SimpleCell Communications · Sykesville, MD</div></div><div class="exp-date">Jan 2024 — Present</div></div><p class="exp-desc">Designing and deploying AI-powered analytics, return prediction, inventory optimization, and lead generation systems. Building full-stack solutions with Azure OpenAI, .NET, BigQuery, RAG, and Power BI.</p></div>
+<div class="exp-item fade"><div class="exp-top"><div><div class="exp-role">Graduate Assistant & Social Media Ambassador</div><div class="exp-company">Hood College · Frederick, MD</div></div><div class="exp-date">Jun 2024 — Dec 2024</div></div><p class="exp-desc">Managed social media presence using data-driven and AI-assisted content strategies. Analyzed engagement metrics and optimized content performance across platforms.</p></div>
+<div class="exp-item fade"><div class="exp-top"><div><div class="exp-role">Software Engineer / Data Engineer</div><div class="exp-company">Fratello Innotech · India</div></div><div class="exp-date">Apr 2021 — Jul 2023</div></div><p class="exp-desc">Built and maintained backend services and data pipelines. Deployed applications on AWS with CI/CD automation. Processed and structured data for analytics and reporting.</p></div>
+</div></section>
 
-    // Scroll reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach((e, i) => {
-        if (e.isIntersecting) {
-          setTimeout(() => e.target.classList.add('visible'), 80 * (Array.from(reveals).indexOf(e.target) % 4));
-          observer.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    reveals.forEach(r => observer.observe(r));
+<section id="education" style="background:#fff"><div class="section-inner"><div style="display:grid;grid-template-columns:1fr 1fr;gap:64px" class="edu-grid">
+<div><div class="section-label">Education</div><div class="edu-item"><div class="edu-degree">M.S. Computer Science</div><div class="edu-school">Hood College, Maryland</div></div><div class="edu-item"><div class="edu-degree">B.Tech Computer Science</div><div class="edu-school">KL University, India</div></div></div>
+<div><div class="section-label">Certifications</div><ul class="cert-list"><li>Azure DevOps Engineer Expert (AZ-400)</li><li>Azure Solutions Architect Expert (AZ-305)</li><li>Google Cloud Digital Leader</li></ul></div>
+</div></div></section>
 
-    // Skill bar animation
-    const skillObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.querySelectorAll('.skill-fill').forEach(bar => {
-            bar.style.width = bar.dataset.w + '%';
-          });
-        }
-      });
-    }, { threshold: 0.3 });
-    document.querySelectorAll('.skills-categories > div').forEach(c => skillObserver.observe(c));
-  </script>
+<section id="contact" class="contact-section"><div class="section-inner"><h2 class="contact-title">Let's connect.</h2><p class="contact-sub">Open to opportunities, collaborations, and interesting AI problems.</p><div class="contact-links"><a href="mailto:sairamkodali633@gmail.com">sairamkodali633@gmail.com</a><a href="https://github.com/sairamkodali-wq" target="_blank">GitHub</a></div></div></section>
+
+<footer><span>© 2026 Sai Ram Kodali</span><span>Maryland, USA</span></footer>
+
+<script>
+const observer=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('show')})},{threshold:.15});
+document.querySelectorAll('.fade').forEach(el=>observer.observe(el));
+setTimeout(()=>document.getElementById('hero-content').classList.add('show'),150);
+</script>
 </body>
 </html>
